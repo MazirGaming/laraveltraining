@@ -11,6 +11,7 @@
   <body>
     <div id="app">
       <p v-if="valueEmit">Tín hiệu từ Emit có thể khiến tôi bị ẩn hoặc hiện</p>
+      <p>Bạn đã truyền emit {{countEmit}} lần</p>
       <child-component :prop="prop" @send-emit="handleSendEmit"></child-component> 
     </div>
     <script>
@@ -22,7 +23,7 @@
         template: `
           <div>
             <h2>{{ prop }}</h2>
-            <button @click="sendEmit">Click vào tôi để truyền emits</button>
+            <button @click="incrementCount">{{ count }}</button>
           </div>
         `,
         props: {
@@ -31,12 +32,15 @@
           }
         },
         setup(props, { emit }) {
-          
-          function sendEmit() {
-            emit('send-emit')
+          const count = ref(0)
+          function incrementCount(){
+            count.value++
+            emit('send-emit', count.value)
           }
+
           return {
-            sendEmit
+            incrementCount,
+            count
           }
       }
       })
@@ -45,16 +49,18 @@
         setup() {
             const prop = ref('Tín hiệu từ Prop')
             const valueEmit = ref(true)
+            const countEmit = ref(0)
 
-            function handleSendEmit() {
-              console.log(1)
+            function handleSendEmit(count) {
               valueEmit.value = !valueEmit.value
+              countEmit.value = count
             }
 
             return {
               prop,
               valueEmit,
-              handleSendEmit
+              handleSendEmit,
+              countEmit
             }
           }
       })

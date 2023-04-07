@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Computed</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <p>Trường đạt chuẩn là trường phải có từ 3 khối trở lên</p>
+      <p>Trường đạt tiêu chuẩn không? {{ haveReal }}</p>
+      <p>Trường đang có: {{ school.classes.length }} khối.</p>
+      <button @click="onRemove">Xóa bỏ lớp để loại bỏ trường chuẩn</button>
+    </div>
+    <script>
+      const { createApp, reactive, computed } = Vue
+
+      const app = createApp({
+          setup() {
+            const school = reactive({
+              name: 'THCS TT',
+              classes: [
+                '9 - Khoi 9',
+                '8 - Khoi 8 ',
+                '7 - Khoi 7',
+                '6 - Khoi 6',
+              ]
+            })
+
+            const haveReal = computed(() => {
+              return school.classes.length >= 3 ? 'Chuẩn' : 'Không Chuẩn'
+            })
+
+            function onRemove() {
+              return school.classes.pop();
+            }
+            
+            return {
+              school,
+              haveReal,
+              onRemove
+            }
+
+          }
+      }).mount('#app')
+  </script>
+  </body>
+</html>

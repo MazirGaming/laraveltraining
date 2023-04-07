@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VueRoute</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4.0.15/dist/vue-router.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <h1>Hello App!</h1>
+      <div style="display: flex; flex-direction: column;">
+        <router-link to="/">Go to Home</router-link>
+        <router-link to="/about">Go to About</router-link>
+        <router-link to="/login">Go to Login</router-link>
+      </div>
+      <router-view></router-view>
+    </div>
+    <script>
+
+      const { createApp, ref } = Vue
+      const Home = { template: '<div>Đây là trang Home</div>' }
+      const About = { template: '<div>Đây là trang About</div>' }
+      const Login = { template: '<div>Màn hình đăng nhập</div>' }
+
+      const routes = [
+        { path: '/', component: Home, beforeEnter: (to, from, next) => {
+          if (window.confirm('Chào mừng bạn tới trang chủ') == true) {
+            next()
+          } else {
+            next('/login')
+          }
+        }},
+        { path: '/about', component: About },
+        { path: '/login', component: Login },
+      ]
+
+      const router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes,
+      })
+
+      const admin = {name: 'admin', isAdmin: true}
+      
+      router.beforeEach(async (to, from, next) => {
+        if (!admin.isAdmin) next('/login')
+        else next()
+      })
+
+      const app = createApp({
+        setup() {
+          
+        }
+      })
+      app.use(router)
+      app.mount('#app')
+  </script>
+  </body>
+</html>

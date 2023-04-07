@@ -12,18 +12,23 @@
     <div id="app">
       <h1 :style="{color: isRed}" :class="nameClass">{{ message }}</h1>
     </div>
-
     <script>
-      Vue.createApp({
-        el: "#app",
-        data: function () {
-          return {
-            message: "MazirGaming",
-            isRed: 'red',
-            nameClass: ['background', 'title']
-          };
-        },
-      }).mount("#app");
-    </script>
+      const { createApp, ref } = Vue
+
+      const app = createApp({
+          setup() {
+            const message =  ref('MazirGaming')
+            const isRed =  ref('red')
+            const nameClass = ['background', 'title']
+            
+            return {
+              message,
+              isRed,
+              nameClass
+            }
+
+          }
+      }).mount('#app')
+  </script>
   </body>
 </html>

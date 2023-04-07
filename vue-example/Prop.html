@@ -10,7 +10,7 @@
 
   <body>
     <div id="app">
-      <child-component :prop="prop"></child-component> 
+      <child-component :message="message" :user="user"></child-component> 
     </div>
     <script>
 
@@ -20,21 +20,34 @@
         name: 'ChildComponent',
         template: `
           <div>
-            <h2>{{ prop }}</h2>
+            <h2>{{ props.message }}</h2>
+            <h2>{{ props.user.name }}</h2>
+            <h2>{{ props.user.age }}</h2>
           </div>
         `,
         props: {
-          prop: {
+          message: {
             type: String,
+          },
+          user: {
+            type: Object,
+          },
+        },
+        setup(props) {
+          return {
+            props
           }
-        }
+        },
+        
       })
 
       const app = createApp({
         setup() {
-            const prop = ref('Tín hiệu từ Prop')
+            const message = ref('Tín hiệu từ Prop')
+            const user = {name: "manh", age : 24}
             return {
-              prop
+              message,
+              user
             }
           }
       })

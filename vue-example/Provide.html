@@ -10,7 +10,7 @@
 
   <body>
     <div id="app">
-      <child-component></child-component> 
+      <child-component :prop="prop"></child-component> 
     </div>
     <script>
       const { createApp, ref, defineComponent, provide, inject } = Vue
@@ -19,7 +19,7 @@
         name: 'ChildComponent',
         template: `
           <div>
-            <h2>{{ prop }}</h2>
+            <h2>{{ props.prop }}</h2>
             <p>{{ message }} được truyền từ provide</p>
           </div>
         `,
@@ -28,9 +28,10 @@
             type: String,
           }
         },
-        setup() {
+        setup(props) {
           const message = inject('message')
           return {
+            props,
             message
           }
         }

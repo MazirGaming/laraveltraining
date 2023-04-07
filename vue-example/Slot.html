@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slot</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+ 
+  <body>
+    <div id="app">
+      <child-component>
+        <p>Đây là thông tin truyền vào slot</p>
+        <template v-slot:footer>
+          <!-- Nội dung truyền vào đây chỉ truyền vào slot có name = footer trong component con -->
+          <h2>Truyền slot name</h2>
+        </template>
+      </child-component>
+    </div>
+    <script>
+      const { createApp, ref, defineComponent } = Vue
+
+      const ChildComponent = defineComponent({
+        name: 'ChildComponent',
+        template: `
+        <slot>
+          <p>Tôi sẽ được xuất hiện mặc định nếu không có slot nào được truyền từ Comp cha</p>
+          <p>Nếu có thì sẽ thay thế tất cả nội dung trong thẻ slot</p>
+        </slot>
+        <slot name="footer">
+
+        </slot>
+        `,
+        props: {
+          prop: {
+            type: String,
+          }
+        },
+      })
+
+      const app = createApp({
+        setup() {
+            const prop = ref('Tín hiệu từ Prop')
+            return {
+              prop
+            }
+        }
+
+      })
+      app.component('child-component', ChildComponent)
+      app.mount('#app')
+  </script>
+  </body>
+</html>

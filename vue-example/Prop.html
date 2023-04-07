@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prop</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <child-component :message="message" :user="user"></child-component> 
+    </div>
+    <script>
+
+      const { createApp, ref, defineComponent } = Vue
+
+      const ChildComponent = defineComponent({
+        name: 'ChildComponent',
+        template: `
+          <div>
+            <h2>{{ props.message }}</h2>
+            <h2>{{ props.user.name }}</h2>
+            <h2>{{ props.user.age }}</h2>
+          </div>
+        `,
+        props: {
+          message: {
+            type: String,
+          },
+          user: {
+            type: Object,
+          },
+        },
+        setup(props) {
+          return {
+            props
+          }
+        },
+        
+      })
+
+      const app = createApp({
+        setup() {
+            const message = ref('Tín hiệu từ Prop')
+            const user = {name: "manh", age : 24}
+            return {
+              message,
+              user
+            }
+          }
+      })
+      app.component('child-component', ChildComponent)
+      app.mount('#app')
+  </script>
+  </body>
+</html>

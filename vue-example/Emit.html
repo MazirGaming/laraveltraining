@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prop</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <p v-if="valueEmit">Tín hiệu từ Emit có thể khiến tôi bị ẩn hoặc hiện</p>
+      <p>Bạn đã truyền emit {{countEmit}} lần</p>
+      <child-component :prop="prop" @send-emit="handleSendEmit"></child-component> 
+    </div>
+    <script>
+
+      const { createApp, ref, defineComponent } = Vue
+
+      const ChildComponent = defineComponent({
+        name: 'ChildComponent',
+        template: `
+          <div>
+            <h2>{{ prop }}</h2>
+            <button @click="incrementCount">{{ count }}</button>
+          </div>
+        `,
+        props: {
+          prop: {
+            type: String,
+          }
+        },
+        setup(props, { emit }) {
+          const count = ref(0)
+          function incrementCount(){
+            count.value++
+            emit('send-emit', count.value)
+          }
+
+          return {
+            incrementCount,
+            count
+          }
+      }
+      })
+
+      const app = createApp({
+        setup() {
+            const prop = ref('Tín hiệu từ Prop')
+            const valueEmit = ref(true)
+            const countEmit = ref(0)
+
+            function handleSendEmit(count) {
+              valueEmit.value = !valueEmit.value
+              countEmit.value = count
+            }
+
+            return {
+              prop,
+              valueEmit,
+              handleSendEmit,
+              countEmit
+            }
+          }
+      })
+      app.component('child-component', ChildComponent)
+      app.mount('#app')
+  </script>
+  </body>
+</html>

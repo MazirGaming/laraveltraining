@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Provide</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <child-component :prop="prop"></child-component> 
+    </div>
+    <script>
+      const { createApp, ref, defineComponent, provide, inject } = Vue
+
+      const ChildComponent = defineComponent({
+        name: 'ChildComponent',
+        template: `
+          <div>
+            <h2>{{ props.prop }}</h2>
+            <p>{{ message }} được truyền từ provide</p>
+          </div>
+        `,
+        props: {
+          prop: {
+            type: String,
+          }
+        },
+        setup(props) {
+          const message = inject('message')
+          return {
+            props,
+            message
+          }
+        }
+      })
+
+      const app = createApp({
+        setup() {
+            const prop = ref('Tín hiệu từ Prop')
+            return {
+              prop
+            }
+        }
+
+      })
+      app.provide('message', 'hello!')
+      app.component('child-component', ChildComponent)
+      app.mount('#app')
+  </script>
+  </body>
+</html>

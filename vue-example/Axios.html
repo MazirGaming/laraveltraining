@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Axios</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+        <div>
+            <button @click="fetchData">Fetch Data</button>
+            <div v-if="data">
+                <div v-for="user in data" style="border: 1px solid black;">
+                    <p>Tên: {{user.name}}</p>
+                    <p>Email: {{user.email}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+
+      const { createApp, ref } = Vue
+
+      const app = createApp({
+        setup() {
+          const data = ref(null);
+
+          const fetchData = async () => {
+            const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+            data.value = response.data;
+          };
+
+          return {
+            data,
+            fetchData,
+          };
+          }
+      })
+      app.mount('#app')
+  </script>
+  </body>
+</html>
